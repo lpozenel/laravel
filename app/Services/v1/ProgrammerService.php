@@ -20,6 +20,7 @@ class ProgrammerService {
 		return $this->filterProgrammers(Programmer::all());
 	}
 
+
 	$withKeys = $this->getWithKeys($parameters);
 	$whereClauses = $this->getWhereClause($parameters);
 
@@ -27,6 +28,21 @@ class ProgrammerService {
 
 	return $this->filterProgrammers($programmers, $withKeys);
 }
+
+	public function addProgrammers($req) {
+		$programmer = new Programmer();
+		$programmer->name = $req->input('name');
+		$programmer->email = $req->input('email');
+		$programmer->skills = $req->input('skills');
+		$programmer->location = $req->input('location');
+		$programmer->expert = $req->input('expert');
+
+		$programmer->save();
+
+		return $this->filterProgrammers ([programmer]);
+
+
+	}
 
 	protected function filterProgrammers($programmers, $keys = []) {
 		$data = [];

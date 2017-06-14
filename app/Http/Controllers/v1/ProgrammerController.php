@@ -29,15 +29,6 @@ class ProgrammerController extends Controller
        return response()->json($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -47,7 +38,13 @@ class ProgrammerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+        $programmer = $this->programmers->createProgrammer($request);
+
+            return response()->json($programmer, 201);
+        } catch(Exception $e) {
+            return response()->json([message => $e->getMessage()],500);
+        }
     }
 
     /**
@@ -61,17 +58,7 @@ class ProgrammerController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
+    
     /**
      * Update the specified resource in storage.
      *

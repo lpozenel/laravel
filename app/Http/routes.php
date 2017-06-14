@@ -15,4 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('/v1/programmers',v1\ProgrammerController::class);
+Route::resource('/v1/programmers',v1\ProgrammerController::class, [
+	'except' => ['create', 'edit']
+]);
