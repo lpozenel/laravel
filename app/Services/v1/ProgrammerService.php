@@ -6,27 +6,80 @@ use App\Programmer;
 
 
 class ProgrammerService {
-	public function getProgrammers(){
+	protected $supportedIncludes = [
+		'user' => 'programmer',
+	];
+
+	protected $clauseProperties = [
+		'user'
+	];
+
+	public function getProgrammers($parameters){
+		if (empty($parameters)){
+
 		return $this->filterProgrammers(Programmer::all());
 	}
 
-	protected function filterProgrammers($programmers) {
+	$withKeys = $this->getWithKeys($parameters);
+	$whereClauses = $this->getWhereClause($parameters);
+
+	$programmers = Programmer::with($withKeys)->where($whereClauses)->get();
+
+	return $this->filterProgrammers($programmers, $withKeys);
+}
+
+	protected function filterProgrammers($programmers, $keys = []) {
 		$data = [];
 
 		foreach ($programmers as $programmer) {
 			$entry = [
 				'programmerId' => $programmer->id,
-				'full name' => $programmer->name,
+				'name' => $programmer->name,
 				'email' => $programmer->email,
 				'skills' => $programmer->skills,
 				'location' => $programmer->location,
 				'expert' => $programmer->expert
 			];
 
+			if(in_array('user', $keys)){
+				$entry['arrival'] = [
+				'name' => $programmer->name,
+				'email' => $programmer->email,
+				'skills' => $programmer->skills,
+				'location' => $programmer->location,
+				'expert' => $programmer->expert,
+
+				];
+			}
+
 			$data[] = $entry;
 
 		}
 
 		return $data;
+		}
+
+		protected function getWithKeys($parameters) {
+			$withKeys = [];
+
+			if(isset($parameters['include'])){
+				$includeParms = explode(',', $parameters['include']);
+				$includes = array_intersect($this->supportedIncludes, $includeParms);
+				$withKeys = array_keys($includes);
+			}
+
+			return $withKeys;
+		}
+
+		protected function getWhereClause($parametres) {
+			$clause = [];
+
+			foreach($this->clauseProperties as $prop){
+				if(in_array($prop, array_keys($parametres))){
+					$clause[$prop] = $parameters [$prop];
+				}
+			}
+
+			return $clause;
 		}
 	}

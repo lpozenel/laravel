@@ -22,7 +22,9 @@ class ProgrammerController extends Controller
      */
     public function index()
     {
-       $data = $this->programmers->getProgrammers();
+        $parameters = request()->input();
+
+       $data = $this->programmers->getProgrammers($parameters);
 
        return response()->json($data);
     }
