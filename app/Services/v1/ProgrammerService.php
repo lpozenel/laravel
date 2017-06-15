@@ -29,7 +29,7 @@ class ProgrammerService {
 	return $this->filterProgrammers($programmers, $withKeys);
 }
 
-	public function addProgrammers($req) {
+	public function addProgrammer($req) {
 		$programmer = new Programmer();
 		$programmer->name = $req->input('name');
 		$programmer->email = $req->input('email');
@@ -39,7 +39,7 @@ class ProgrammerService {
 
 		$programmer->save();
 
-		return $this->filterProgrammers ([programmer]);
+		return $this->filterProgrammers ([$programmer]);
 
 
 	}

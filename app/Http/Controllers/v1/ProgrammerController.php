@@ -39,7 +39,7 @@ class ProgrammerController extends Controller
     public function store(Request $request)
     {
         try{
-        $programmer = $this->programmers->createProgrammer($request);
+        $programmer = $this->programmers->addProgrammer($request);
 
             return response()->json($programmer, 201);
         } catch(Exception $e) {
