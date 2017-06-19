@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\v1;
 
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Services\v1\ProgrammerService;
+use App\Services\v1\ProgrammerService; 
 
 class ProgrammerController extends Controller
 {
@@ -55,7 +56,9 @@ class ProgrammerController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = $this->programmers->getProgrammer($id);
+
+       return response()->json($data);
     }
 
     
@@ -68,7 +71,18 @@ class ProgrammerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+        $programmer = $this->programmers->updateProgrammer($request, $id);
+
+            return response()->json($programmer, 200);
+        } 
+        catch(ModelNotFoundException $ex) {
+            throw $ex;
+        }
+
+        catch(Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -79,6 +93,17 @@ class ProgrammerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+        $programmer = $this->programmers->deleteProgrammer($id);
+
+            return response()->make('', 204);
+        } 
+        catch(ModelNotFoundException $ex) {
+            throw $ex;
+        }
+
+        catch(Exception $e) {
+            return response()->json([message => $e->getMessage()],500);
+        }
     }
 }

@@ -44,6 +44,35 @@ class ProgrammerService {
 
 	}
 
+	public function updateProgrammer($req, $id) {
+		$programmer = Programmer::where('id', $id)->firstOrFail();
+		$programmer->name = $req->input('name');
+		$programmer->email = $req->input('email');
+		$programmer->skills = $req->input('skills');
+		$programmer->location = $req->input('location');
+		$programmer->expert = $req->input('expert');
+
+		$programmer->save();
+
+		return $this->filterProgrammers ([$programmer]);
+
+
+	}
+
+
+	public function deleteProgrammer($id) {
+		$programmer = Programmer::where('id', $id)->firstOrFail();
+
+		
+
+		$programmer->delete();
+	}
+
+
+	public function getProgrammer($id){
+		return $this->filterProgrammers(Programmer::where('id', $id)->get());
+	}
+
 	protected function filterProgrammers($programmers, $keys = []) {
 		$data = [];
 
